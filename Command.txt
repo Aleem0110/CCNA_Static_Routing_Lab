@@ -1,0 +1,60 @@
+!========================
+! Router R1 Configuration
+!========================
+enable
+conf t
+hostname R1
+interface g0/1
+ ip address 192.168.1.254 255.255.255.0
+ no shutdown
+interface g0/0
+ ip address 192.168.12.1 255.255.255.0
+ no shutdown
+ip route 192.168.3.0 255.255.255.0 192.168.12.2
+exit
+
+!========================
+! Router R2 Configuration
+!========================
+enable
+conf t
+hostname R2
+interface g0/0
+ ip address 192.168.12.2 255.255.255.0
+ no shutdown
+interface g0/1
+ ip address 192.168.13.2 255.255.255.0
+ no shutdown
+ip route 192.168.12.1 255.255.255.0 g0/0
+ip route 192.168.13.2 255.255.255.0 192.168.13.3
+exit
+
+!========================
+! Router R3 Configuration
+!========================
+enable
+conf t
+hostname R3
+interface g0/0
+ ip address 192.168.13.3 255.255.255.0
+ no shutdown
+interface g0/1
+ ip address 192.168.3.254 255.255.255.0
+ no shutdown
+ip route 192.168.1.0 255.255.255.0 192.168.13.2
+exit
+
+!========================
+! Switch Hygiene Commands
+!========================
+enable
+conf t
+interface range FastEthernet0/5 - 24
+ shutdown
+exit
+
+!========================
+! Ping Test Rituals
+!========================
+! From PC1: ping 192.168.3.1
+! From PC2: ping 192.168.1.1
